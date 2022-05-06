@@ -2201,8 +2201,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
 
 /***/ }),
@@ -2233,20 +2231,22 @@ window.Vue = vue__WEBPACK_IMPORTED_MODULE_0__["default"];
 
 
 
-Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]);
-Vue.use(vue_axios__WEBPACK_IMPORTED_MODULE_2__["default"], (axios__WEBPACK_IMPORTED_MODULE_3___default()));
+
+vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_axios__WEBPACK_IMPORTED_MODULE_2__["default"], (axios__WEBPACK_IMPORTED_MODULE_3___default()));
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
   mode: "history",
   routes: _routes__WEBPACK_IMPORTED_MODULE_4__.routes
 }); //finalmente, definimos nuestra app de Vue
 
-var app = new Vue({
+var app = new vue__WEBPACK_IMPORTED_MODULE_0__["default"]({
   el: "#app",
   router: router,
   render: function render(h) {
     return h(_components_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
   }
 });
+vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(app);
 
 /***/ }),
 
@@ -2294,10 +2294,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_components_Home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/Home.vue */ "./resources/js/components/Home.vue"));
-};
-
-var Contact = function Contact() {
-  return __webpack_require__.e(/*! import() */ "resources_js_components_Contact_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/Contact.vue */ "./resources/js/components/Contact.vue"));
 }; //importamos los componentes para expense
 
 
@@ -2329,10 +2325,6 @@ var routes = [{
   name: "editExpense",
   path: "/edit/:id",
   component: Edit
-}, {
-  name: "contact",
-  path: "/contact",
-  component: Contact
 }];
 
 /***/ }),
@@ -19916,25 +19908,6 @@ var render = function () {
                   ],
                   1
                 ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  { staticClass: "nav-item" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          "exact-active-class": "active",
-                          to: "/contact",
-                        },
-                      },
-                      [_vm._v("Contact")]
-                    ),
-                  ],
-                  1
-                ),
               ]),
               _vm._v(" "),
               _vm._m(2),
@@ -19988,20 +19961,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("form", { staticClass: "d-flex" }, [
-      _c("input", {
-        staticClass: "form-control me-2",
-        attrs: {
-          type: "search",
-          placeholder: "Search",
-          "aria-label": "Search",
-        },
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-outline-success", attrs: { type: "submit" } },
-        [_vm._v("Search")]
-      ),
+      _c("li", [_c("p", [_vm._v("Logout")])]),
     ])
   },
 ]
@@ -35439,7 +35399,7 @@ Vue.compile = compileToFunctions;
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_Home_vue":1,"resources_js_components_Contact_vue":1,"resources_js_components_expense_Show_vue":1,"resources_js_components_expense_Create_vue":1,"resources_js_components_expense_Edit_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_Home_vue":1,"resources_js_components_expense_Show_vue":1,"resources_js_components_expense_Create_vue":1,"resources_js_components_expense_Edit_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

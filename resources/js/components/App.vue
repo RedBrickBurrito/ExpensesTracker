@@ -16,14 +16,12 @@
                     </li>
                     <li class="nav-item">
                         <router-link exact-active-class="active" to="/expenses" class="nav-link">Expense Tracker</router-link>
-                    </li>   
-                     <li class="nav-item">
-                        <router-link exact-active-class="active" to="/contact" class="nav-link">Contact</router-link>
-                    </li>            
+                    </li>           
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <li>
+                        <p>Logout</p>
+                    </li>
                 </form>
                 </div>
             </div>

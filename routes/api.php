@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('expense', App\Http\Controllers\ExpenseController::class)->only(['index', 'store', 'update', 'show', 'destroy']);
+Route::post('/email', [App\Http\Controllers\EmailsController::class, 'index']);

@@ -81,13 +81,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "expenses",
   data: function data() {
     return {
-      expenses: []
+      expenses: [],
+      file: null
     };
   },
   mounted: function mounted() {
@@ -131,11 +133,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         });
       }
     },
-    exportPDF: function exportPDF() {
+    createPDFFile: function createPDFFile() {
       var doc = new jspdf__WEBPACK_IMPORTED_MODULE_1__["default"]('p', 'pt');
       doc.text(" ", 40, 40);
       var rows = [];
-      var filterInfo = this.expenses.map(function (el) {
+      this.expenses.map(function (el) {
         var temp = [el.id, el.expense_date, el.amount, el.payment_method, el.description];
         rows.push(temp);
       });
@@ -143,7 +145,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         head: [["ID", "DATE", "AMOUNT", "PAYMENT METHOD", "DESCRIPTION"]],
         body: rows
       });
-      doc.save('expenses.pdf');
+      this.file = doc;
+    },
+    exportPDF: function exportPDF() {
+      this.createPDFFile();
+      this.file.save('expenses.pdf');
+    },
+    sendPDF: function sendPDF() {
+      this.createPDFFile();
+      var today = new Date().toLocaleDateString('es-MX', {
+        month: 'numeric',
+        year: 'numeric'
+      });
+      var blobPDF = new Blob([this.file.output('blob')], {
+        type: 'application/pdf'
+      });
+      var formData = new FormData();
+      formData.append('to', 'test@mail.com');
+      formData.append('blobPdf', blobPDF, "".concat(today, " expenses.pdf"));
+      this.axios.post('/api/email', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        return console.log('response', response);
+      })["catch"](function (err) {
+        return console.log(err.message);
+      });
     }
   }
 });
@@ -3342,6 +3370,16 @@ var render = function () {
           on: { click: _vm.exportPDF },
         },
         [_vm._v("PDF")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-success",
+          attrs: { type: "button" },
+          on: { click: _vm.sendPDF },
+        },
+        [_vm._v("Send via email")]
       ),
     ]),
   ])

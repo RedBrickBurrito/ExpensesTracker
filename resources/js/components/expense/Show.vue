@@ -42,6 +42,7 @@
         </div>
         <div class="col-12 mb-2">
             <a type="button" @click="exportPDF" class="btn btn-success">PDF</a>
+            <a type="button" @click="sendPDF" class="btn btn-success">Send via email</a>
         </div>
     </div>
 </template>
@@ -54,7 +55,8 @@ export default {
     name:"expenses",
     data(){
         return {
-            expenses:[]
+            expenses:[],
+            file: null
         }
     },
     mounted(){
@@ -80,12 +82,12 @@ export default {
                 })
             }
         },
-        exportPDF(){
+        createPDFFile() {
             var doc = new jsPDF('p', 'pt');
             doc.text(" " ,40, 40);
 
             var rows = [];
-            var filterInfo = this.expenses.map(function (el){
+            this.expenses.map(function (el){
                 var temp = [
                     el.id,
                     el.expense_date,
@@ -99,8 +101,24 @@ export default {
                 head: [["ID", "DATE", "AMOUNT", "PAYMENT METHOD", "DESCRIPTION"]],
                 body : rows,
             });
-            doc.save('expenses.pdf');
+            this.file = doc;
         },
+        exportPDF(){
+            this.createPDFFile();
+            this.file.save('expenses.pdf');
+        },
+        sendPDF() {
+            this.createPDFFile();
+            var today = new Date().toLocaleDateString('es-MX', { month: 'numeric', year: 'numeric'});
+            var blobPDF = new Blob([ this.file.output('blob') ], { type: 'application/pdf' });
+            var formData = new FormData();
+            formData.append('to', 'test@mail.com');
+            formData.append('blobPdf', blobPDF, `${today} expenses.pdf`);
+            
+            this.axios.post('/api/email', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+                .then((response) => console.log('response', response))
+                .catch((err) => console.log(err.message))
+        }
     }
 }
 </script>

@@ -1,11 +1,7 @@
 @component('mail::message')
-# Introduction
+# {{ date('d-m-Y') }} Expenses
 
-The body of your message.
-
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
+The attached pdf contains your expenses up until {{ date('d-m-Y')}}.
 
 Thanks,<br>
 {{ config('app.name') }}

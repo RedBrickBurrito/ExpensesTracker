@@ -72,6 +72,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 var tokenJSON = localStorage.getItem("user");
 var token = JSON.parse(tokenJSON).access_token;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -100,7 +111,6 @@ var token = JSON.parse(tokenJSON).access_token;
                   }
                 }).then(function (response) {
                   _this.expenses = response.data;
-                  console.log("DATA");
                   console.log(response.data);
                 })["catch"](function (error) {
                   console.log(error);
@@ -134,7 +144,7 @@ var token = JSON.parse(tokenJSON).access_token;
       var doc = new jspdf__WEBPACK_IMPORTED_MODULE_1__["default"]('p', 'pt');
       doc.text(" ", 40, 40);
       var rows = [];
-      var filterInfo = this.expenses.map(function (el) {
+      var filterInfo = this.expenses.data.map(function (el) {
         var temp = [el.id, el.expense_date, el.amount, el.payment_method, el.description];
         rows.push(temp);
       });

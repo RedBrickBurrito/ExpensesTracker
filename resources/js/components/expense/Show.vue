@@ -97,7 +97,7 @@ export default {
             doc.text(" " ,40, 40);
 
             var rows = [];
-            var filterInfo = this.expenses.map(function (el){
+            var filterInfo = this.expenses.data.map(function (el){
                 var temp = [
                     el.id,
                     el.expense_date,

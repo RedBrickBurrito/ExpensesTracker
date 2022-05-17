@@ -39566,7 +39566,7 @@ var index_esm = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_Home_vue":1,"resources_js_components_expense_Show_vue":1,"resources_js_components_expense_Create_vue":1,"resources_js_components_expense_Edit_vue":1,"resources_js_components_pages_Login_vue":1,"resources_js_components_pages_Register_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_Home_vue":1,"resources_js_components_expense_Show_vue":1,"resources_js_components_expense_Create_vue":1,"resources_js_components_expense_Edit_vue":1,"resources_js_components_pages_Login_vue":1,"resources_js_components_pages_Register_vue":1,"node_modules_html2canvas_dist_html2canvas_js":1,"node_modules_dompurify_dist_purify_js":1,"node_modules_canvg_lib_index_es_js":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

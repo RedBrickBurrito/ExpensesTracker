@@ -1,3 +1,9 @@
+<header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+</header>
+
+
 <template>
     <div class="row">
         <div class="col-12 mb-2">
@@ -34,10 +40,16 @@
                         </table>
                     </div>                          
         </div>
+        <div class="col-12 mb-2">
+            <a type="button" @click="exportPDF" class="btn btn-success">PDF</a>
+        </div>
     </div>
 </template>
 
 <script>
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+
 export default {
     name:"expenses",
     data(){
@@ -52,6 +64,7 @@ export default {
         async showExpenses(){
             await this.axios.get('/api/expense').then(response=>{
                 this.expenses = response.data
+                console.log("DATA")
                 console.log(response.data);
             }).catch(error=>{
                 console.log(error)
@@ -66,7 +79,28 @@ export default {
                     console.log(error)
                 })
             }
-        }
+        },
+        exportPDF(){
+            var doc = new jsPDF('p', 'pt');
+            doc.text(" " ,40, 40);
+
+            var rows = [];
+            var filterInfo = this.expenses.map(function (el){
+                var temp = [
+                    el.id,
+                    el.expense_date,
+                    el.amount,
+                    el.payment_method,
+                    el.description,
+                ];
+                rows.push(temp);
+            });
+            doc.autoTable({
+                head: [["ID", "DATE", "AMOUNT", "PAYMENT METHOD", "DESCRIPTION"]],
+                body : rows,
+            });
+            doc.save('expenses.pdf');
+        },
     }
 }
 </script>

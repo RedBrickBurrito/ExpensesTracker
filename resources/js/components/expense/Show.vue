@@ -23,7 +23,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="expense in expenses" :key="expense.id">
+                                <tr v-for="expense in expenses.data" :key="expense.id">
                                     <td>{{ expense.id }}</td>
                                     <td>{{ expense.expense_date }}</td>
                                     <td>{{ expense.amount }}</td>
@@ -50,11 +50,14 @@
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
+const tokenJSON = localStorage.getItem("user");
+const token = JSON.parse(tokenJSON).access_token;
+
 export default {
     name:"expenses",
     data(){
         return {
-            expenses:[]
+            expenses:[],
         }
     },
     mounted(){
@@ -62,10 +65,14 @@ export default {
     },
     methods:{
         async showExpenses(){
-            await this.axios.get('/api/expense').then(response=>{
-                this.expenses = response.data
-                console.log("DATA")
-                console.log(response.data);
+            await this.axios.get('/api/expense', {
+                headers: {
+                    'Authorization' : 'Bearer ' + token
+                }
+            })
+            .then(response=>{
+                this.expenses = response.data;
+                console.log(response.data)
             }).catch(error=>{
                 console.log(error)
                 this.expenses = []
@@ -73,7 +80,12 @@ export default {
         },
         removeExpense(id){
             if(confirm("Are you sure you want to remove the expense?")){
-                this.axios.delete(`/api/expense/${id}`).then(response=>{
+                this.axios.delete(`/api/expense/${id}`, {
+                    headers: {
+                        'Authorization' : 'Bearer ' + token
+                    }
+                })
+                .then(response=>{
                     this.showExpenses()
                 }).catch(error=>{
                     console.log(error)

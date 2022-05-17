@@ -40,6 +40,9 @@
 </template>
 
 <script>
+const tokenJSON = localStorage.getItem("user");
+const token = JSON.parse(tokenJSON).access_token;
+
 export default {
     name:"create-expense",
     data(){
@@ -54,7 +57,7 @@ export default {
     },
     methods:{
         async add(){
-            await this.axios.post('/api/expense',this.expense).then(response=>{
+            await this.axios.post('/api/expense',this.expense,{headers: {'Authorization' : 'Bearer ' + token}}).then(response=>{
                 this.$router.push({name:"showExpenses"})
             }).catch(error=>{
                 console.log(error)

@@ -12,18 +12,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <router-link exact-active-class="active" to="/" class="nav-link active" aria-current="page">Home</router-link>
+                        <router-link exact-active-class="active" to="/home" class="nav-link active" aria-current="page">Home</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link exact-active-class="active" to="/expenses" class="nav-link">Expense Tracker</router-link>
-                    </li>   
-                     <li class="nav-item">
-                        <router-link exact-active-class="active" to="/contact" class="nav-link">Contact</router-link>
-                    </li>            
+                    </li>           
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                        <button type="submit" class="btn btn-danger" @click="logout()" v-if="isLogged">
+                            Logout
+                        </button>
                 </form>
                 </div>
             </div>
@@ -35,5 +33,17 @@
 </template>
  
 <script>
-    export default {}
+    import {mapGetters} from 'vuex';
+    export default {
+        computed: {
+            ...mapGetters([
+                'isLogged'
+            ])
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch('logout')
+            }
+        }
+    }
 </script>

@@ -40,6 +40,9 @@
 </template>
 
 <script>
+const tokenJSON = localStorage.getItem("user");
+const token = JSON.parse(tokenJSON).access_token;
+
 export default {
     name:"edit-expense",
     data(){
@@ -57,7 +60,7 @@ export default {
     },
     methods:{
         async showExpense(){
-            await this.axios.get(`/api/expense/${this.$route.params.id}`).then(response=>{
+            await this.axios.get(`/api/expense/${this.$route.params.id}`, {headers: {'Authorization' : 'Bearer ' + token}}).then(response=>{
                 const { expense_date, amount, payment_method, description } = response.data
                 this.expense.expense_date = expense_date
                 this.expense.amount = amount
@@ -71,7 +74,7 @@ export default {
             console.log("ACTUALIZAR EXPENSE");
             console.log(this.expense);
             console.log(this.$route.params.id);
-            await this.axios.put(`/api/expense/${this.$route.params.id}`,this.expense).then(response=>{
+            await this.axios.put(`/api/expense/${this.$route.params.id}`,this.expense, {headers: {'Authorization' : 'Bearer ' + token}}).then(response=>{
                 console.log(response);
                 this.$router.push({name:"showExpenses"})
             }).catch(error=>{

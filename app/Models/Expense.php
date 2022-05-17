@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Expense extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'expense_date', 'amount', 'payment_method'];
+    protected $fillable = ['user_id','description', 'expense_date', 'amount', 'payment_method'];
 }

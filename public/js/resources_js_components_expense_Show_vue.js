@@ -72,17 +72,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
+var tokenJSON = localStorage.getItem("user");
+var token = JSON.parse(tokenJSON).access_token;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "expenses",
   data: function data() {
@@ -103,7 +94,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this.axios.get('/api/expense').then(function (response) {
+                return _this.axios.get('/api/expense', {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                }).then(function (response) {
                   _this.expenses = response.data;
                   console.log("DATA");
                   console.log(response.data);
@@ -124,7 +119,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       if (confirm("Are you sure you want to remove the expense?")) {
-        this.axios["delete"]("/api/expense/".concat(id)).then(function (response) {
+        this.axios["delete"]("/api/expense/".concat(id), {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        }).then(function (response) {
           _this2.showExpenses();
         })["catch"](function (error) {
           console.log(error);
@@ -3280,7 +3279,7 @@ var render = function () {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.expenses, function (expense) {
+            _vm._l(_vm.expenses.data, function (expense) {
               return _c("tr", { key: expense.id }, [
                 _c("td", [_vm._v(_vm._s(expense.id))]),
                 _vm._v(" "),

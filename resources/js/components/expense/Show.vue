@@ -51,8 +51,9 @@
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
-const tokenJSON = localStorage.getItem("user");
-const token = JSON.parse(tokenJSON).access_token;
+const tokenJSON = JSON.parse(localStorage.getItem("user"));
+const token = tokenJSON.access_token;
+const userEmail = tokenJSON.email;
 
 export default {
     name:"expenses",
@@ -124,12 +125,23 @@ export default {
             var today = new Date().toLocaleDateString('es-MX', { month: 'numeric', year: 'numeric'});
             var blobPDF = new Blob([ this.file.output('blob') ], { type: 'application/pdf' });
             var formData = new FormData();
-            formData.append('to', 'test@mail.com');
+            formData.append('to', userEmail);
             formData.append('blobPdf', blobPDF, `${today} expenses.pdf`);
+
+            console.log('sending email to ', userEmail);
             
-            this.axios.post('/api/email', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-                .then((response) => console.log('response', response))
-                .catch((err) => console.log(err.message))
+            this.axios.post('/api/email', formData, { 
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization' : 'Bearer ' + token 
+                    }
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        alert('The email was sent successfully!');
+                    }
+                })
+                .catch((err) => alert('There was an error sending the email :('));
         }
     }
 }

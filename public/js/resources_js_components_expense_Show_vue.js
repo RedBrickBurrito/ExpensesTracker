@@ -84,8 +84,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 
-var tokenJSON = localStorage.getItem("user");
-var token = JSON.parse(tokenJSON).access_token;
+var tokenJSON = JSON.parse(localStorage.getItem("user"));
+var token = tokenJSON.access_token;
+var userEmail = tokenJSON.email;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "expenses",
   data: function data() {
@@ -170,16 +171,20 @@ var token = JSON.parse(tokenJSON).access_token;
         type: 'application/pdf'
       });
       var formData = new FormData();
-      formData.append('to', 'test@mail.com');
+      formData.append('to', userEmail);
       formData.append('blobPdf', blobPDF, "".concat(today, " expenses.pdf"));
+      console.log('sending email to ', userEmail);
       this.axios.post('/api/email', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + token
         }
       }).then(function (response) {
-        return console.log('response', response);
+        if (response.status == 200) {
+          alert('The email was sent successfully!');
+        }
       })["catch"](function (err) {
-        return console.log(err.message);
+        return alert('There was an error sending the email :(');
       });
     }
   }

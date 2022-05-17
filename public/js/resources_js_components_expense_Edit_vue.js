@@ -71,6 +71,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+var tokenJSON = localStorage.getItem("user");
+var token = JSON.parse(tokenJSON).access_token;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "edit-expense",
   data: function data() {
@@ -96,7 +98,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this.axios.get("/api/expense/".concat(_this.$route.params.id)).then(function (response) {
+                return _this.axios.get("/api/expense/".concat(_this.$route.params.id), {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                }).then(function (response) {
                   var _response$data = response.data,
                       expense_date = _response$data.expense_date,
                       amount = _response$data.amount,
@@ -130,7 +136,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log(_this2.expense);
                 console.log(_this2.$route.params.id);
                 _context2.next = 5;
-                return _this2.axios.put("/api/expense/".concat(_this2.$route.params.id), _this2.expense).then(function (response) {
+                return _this2.axios.put("/api/expense/".concat(_this2.$route.params.id), _this2.expense, {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                }).then(function (response) {
                   console.log(response);
 
                   _this2.$router.push({

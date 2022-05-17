@@ -23,6 +23,8 @@
         "mix": "^0.0.1",
         "vue": "^2.6.14",
         "vue-axios": "^3.4.1",
-        "vue-router": "^3.5.2"
+        "vue-router": "^3.5.2",
+        "vue-simple-alert": "^1.1.1",
+        "vuex": "^3.0.0"
     }
 }

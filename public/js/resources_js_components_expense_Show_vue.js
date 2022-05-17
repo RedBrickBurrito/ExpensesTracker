@@ -81,15 +81,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
-var tokenJSON = localStorage.getItem("user");
-var token = JSON.parse(tokenJSON).access_token;
+var tokenJSON = JSON.parse(localStorage.getItem("user"));
+var token = tokenJSON.access_token;
+var userEmail = tokenJSON.email;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "expenses",
   data: function data() {
     return {
-      expenses: []
+      expenses: [],
+      file: null
     };
   },
   mounted: function mounted() {
@@ -140,11 +143,11 @@ var token = JSON.parse(tokenJSON).access_token;
         });
       }
     },
-    exportPDF: function exportPDF() {
+    createPDFFile: function createPDFFile() {
       var doc = new jspdf__WEBPACK_IMPORTED_MODULE_1__["default"]('p', 'pt');
       doc.text(" ", 40, 40);
       var rows = [];
-      var filterInfo = this.expenses.data.map(function (el) {
+      this.expenses.data.map(function (el) {
         var temp = [el.id, el.expense_date, el.amount, el.payment_method, el.description];
         rows.push(temp);
       });
@@ -152,7 +155,37 @@ var token = JSON.parse(tokenJSON).access_token;
         head: [["ID", "DATE", "AMOUNT", "PAYMENT METHOD", "DESCRIPTION"]],
         body: rows
       });
-      doc.save('expenses.pdf');
+      this.file = doc;
+    },
+    exportPDF: function exportPDF() {
+      this.createPDFFile();
+      this.file.save('expenses.pdf');
+    },
+    sendPDF: function sendPDF() {
+      this.createPDFFile();
+      var today = new Date().toLocaleDateString('es-MX', {
+        month: 'numeric',
+        year: 'numeric'
+      });
+      var blobPDF = new Blob([this.file.output('blob')], {
+        type: 'application/pdf'
+      });
+      var formData = new FormData();
+      formData.append('to', userEmail);
+      formData.append('blobPdf', blobPDF, "".concat(today, " expenses.pdf"));
+      console.log('sending email to ', userEmail);
+      this.axios.post('/api/email', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + token
+        }
+      }).then(function (response) {
+        if (response.status == 200) {
+          alert('The email was sent successfully!');
+        }
+      })["catch"](function (err) {
+        return alert('There was an error sending the email :(');
+      });
     }
   }
 });
@@ -3351,6 +3384,16 @@ var render = function () {
           on: { click: _vm.exportPDF },
         },
         [_vm._v("PDF")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-success",
+          attrs: { type: "button" },
+          on: { click: _vm.sendPDF },
+        },
+        [_vm._v("Send via email")]
       ),
     ]),
   ])

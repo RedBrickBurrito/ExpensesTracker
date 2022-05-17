@@ -43,11 +43,13 @@ class UserController extends Controller
             if(Hash::check($request->password, $user->password)) {
                 // create token
                 $token = $user->createToken("auth_token")->plainTextToken;
+                $email = $user->email;
 
                 return response()->json([
                     "status" => 1,
                     "msg" => "User logged successfully!",
                     "access_token" => $token,
+                    "email" => $email,
                 ]);
             } else {
                 return response()->json([

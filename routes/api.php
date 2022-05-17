@@ -23,11 +23,13 @@ Route::post('login', [UserController::class, 'login']);
 Route::group(['middleware' => ["auth:sanctum"]], function() {
     Route::get('user-profile', [UserController::class, 'userProfile']);
     Route::get('logout', [UserController::class, 'logout']);
-
+    
     Route::resource('expense', ExpenseController::class)->only(['index', 'store', 'update', 'show', 'destroy']);
+    Route::post('/email', [App\Http\Controllers\EmailsController::class, 'index']);
 });
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+

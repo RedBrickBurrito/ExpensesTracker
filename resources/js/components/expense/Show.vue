@@ -42,6 +42,7 @@
         </div>
         <div class="col-12 mb-2">
             <a type="button" @click="exportPDF" class="btn btn-success">PDF</a>
+            <a type="button" @click="sendPDF" class="btn btn-success">Send via email</a>
         </div>
     </div>
 </template>
@@ -50,14 +51,16 @@
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
-const tokenJSON = localStorage.getItem("user");
-const token = JSON.parse(tokenJSON).access_token;
+const tokenJSON = JSON.parse(localStorage.getItem("user"));
+const token = tokenJSON.access_token;
+const userEmail = tokenJSON.email;
 
 export default {
     name:"expenses",
     data(){
         return {
             expenses:[],
+            file: null
         }
     },
     mounted(){
@@ -92,12 +95,12 @@ export default {
                 })
             }
         },
-        exportPDF(){
+        createPDFFile() {
             var doc = new jsPDF('p', 'pt');
             doc.text(" " ,40, 40);
 
             var rows = [];
-            var filterInfo = this.expenses.data.map(function (el){
+            this.expenses.data.map(function (el){
                 var temp = [
                     el.id,
                     el.expense_date,
@@ -111,8 +114,35 @@ export default {
                 head: [["ID", "DATE", "AMOUNT", "PAYMENT METHOD", "DESCRIPTION"]],
                 body : rows,
             });
-            doc.save('expenses.pdf');
+            this.file = doc;
         },
+        exportPDF(){
+            this.createPDFFile();
+            this.file.save('expenses.pdf');
+        },
+        sendPDF() {
+            this.createPDFFile();
+            var today = new Date().toLocaleDateString('es-MX', { month: 'numeric', year: 'numeric'});
+            var blobPDF = new Blob([ this.file.output('blob') ], { type: 'application/pdf' });
+            var formData = new FormData();
+            formData.append('to', userEmail);
+            formData.append('blobPdf', blobPDF, `${today} expenses.pdf`);
+
+            console.log('sending email to ', userEmail);
+            
+            this.axios.post('/api/email', formData, { 
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization' : 'Bearer ' + token 
+                    }
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        alert('The email was sent successfully!');
+                    }
+                })
+                .catch((err) => alert('There was an error sending the email :('));
+        }
     }
 }
 </script>

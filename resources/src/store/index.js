@@ -5,7 +5,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/'
+axios.defaults.baseURL = 'https://expensetrackeracej.herokuapp.com/'
 
 export default new Vuex.Store({
   state: {
